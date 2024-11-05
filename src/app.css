@@ -4,5 +4,5 @@
 
 html,
 body {
-	@apply h-screen w-screen bg-base-200;
+	@apply h-screen min-h-fit w-screen bg-base-200;
 }

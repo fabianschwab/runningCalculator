@@ -6,7 +6,7 @@
 
 <h1>Running Distance Calculator</h1>
 <p>Calculate total distance for your daily running workout!</p>
-<div class="mb-16 flex flex-col">
+<div class="mb-8 flex flex-col">
 	<div class="form-control w-52">
 		<label class="label cursor-pointer">
 			<span class="label-text">Warm up</span>
