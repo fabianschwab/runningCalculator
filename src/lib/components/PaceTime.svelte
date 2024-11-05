@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 
-	let duration = $state('00:03:00');
-	let pace = $state('00:04:30');
+	let duration = $state('00:30:00');
+	let pace = $state('00:05:30');
 
 	let recoverPace = $state('00:06:00');
 	let recoverDuration = $state('00:06:00');
@@ -32,7 +32,7 @@
 
 			return (
 				(durationTime / paceTime) * rounds +
-				(recoverDurationTime / recoverPaceTime) * (skipLastRecover ? rounds : rounds - 1)
+				(recoverDurationTime / recoverPaceTime) * (skipLastRecover ? rounds - 1 : rounds)
 			);
 		}
 
