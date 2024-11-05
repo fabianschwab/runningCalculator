@@ -20,7 +20,7 @@
 		</label>
 	</div>
 </div>
-<div class=" grid w-full grid-cols-3 gap-7">
+<div class="grid grid-cols-3 gap-8">
 	{#if enableWarmUp}
 		<PaceTime>
 			<span class="text-error">Warm up</span>
