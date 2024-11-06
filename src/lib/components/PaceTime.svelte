@@ -81,6 +81,7 @@
 				<input
 					type="number"
 					step="1"
+					min="1"
 					placeholder="Type here"
 					class="input input-bordered"
 					bind:value={rounds}
