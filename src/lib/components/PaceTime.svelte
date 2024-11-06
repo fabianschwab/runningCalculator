@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { type Snippet } from 'svelte';
 
 	let duration = $state('00:30:00');
 	let pace = $state('00:05:30');
@@ -7,28 +7,17 @@
 	let recoverPace = $state('00:06:00');
 	let recoverDuration = $state('00:06:00');
 
-	let enableWorkout = $state(false);
+	let enableWorkout: boolean = $state(false);
 	let rounds: number = $state(1);
 	let skipLastRecover: boolean = $state(true);
 
 	let distance: number = $derived.by(() => {
-		let [paceHours, paceMinutes, paceSeconds] = pace.split(':').map(Number);
-		let [durationHours, durationMinutes, durationSeconds] = duration.split(':').map(Number);
-
-		let paceTime = paceHours * 3600 + paceMinutes * 60 + paceSeconds;
-		let durationTime = durationHours * 3600 + durationMinutes * 60 + durationSeconds;
-
 		if (enableWorkout) {
-			let [recoverPaceHours, recoverPaceMinutes, recoverPaceSeconds] = recoverPace
-				.split(':')
-				.map(Number);
-			let [recoverDurationHours, recoverDurationMinutes, recoverDurationSeconds] = recoverDuration
-				.split(':')
-				.map(Number);
+			let paceTime = time2Seconds(pace);
+			let durationTime = time2Seconds(duration);
 
-			let recoverPaceTime = recoverPaceHours * 3600 + recoverPaceMinutes * 60 + recoverPaceSeconds;
-			let recoverDurationTime =
-				recoverDurationHours * 3600 + recoverDurationMinutes * 60 + recoverDurationSeconds;
+			let recoverPaceTime = time2Seconds(recoverPace);
+			let recoverDurationTime = time2Seconds(recoverDuration);
 
 			return (
 				(durationTime / paceTime) * rounds +
@@ -36,14 +25,20 @@
 			);
 		}
 
-		return durationTime / paceTime;
+		return time2Seconds(duration) / time2Seconds(pace);
 	});
+
+	function time2Seconds(time: string): number {
+		let [h, m, s] = time.split(':').map(Number);
+		return h * 3600 + m * 60 + s;
+	}
 
 	type Props = {
 		children?: Snippet;
+		workoutOption?: boolean;
 	};
 
-	let { children }: Props = $props();
+	let { children, workoutOption = false }: Props = $props();
 </script>
 
 <div class="card bg-base-100 shadow-md">
@@ -52,34 +47,34 @@
 			{#if children}
 				{@render children()}
 			{:else}
-				{enableWorkout ? 'Workout' : 'Main Run'}
+				Training
 			{/if}
 			<div class="text-sm font-semibold">
 				Split distance {distance.toFixed(2)} km
 			</div>
 		</div>
-		{#if !children}
+		{#if workoutOption}
 			<div class="form-control">
 				<label class="label cursor-pointer">
 					<span class="label-text">Do a workout</span>
 					<input type="checkbox" class="toggle" bind:checked={enableWorkout} />
 				</label>
 			</div>
-			{#if enableWorkout}
-				<label class="form-control">
-					<div class="label">
-						<span class="label-text">Number of rounds</span>
-					</div>
-					<input
-						type="number"
-						step="1"
-						placeholder="Type here"
-						class="input input-bordered"
-						bind:value={rounds}
-					/>
-				</label>
-				<div class="divider">Run</div>
-			{/if}
+		{/if}
+		{#if enableWorkout}
+			<label class="form-control">
+				<div class="label">
+					<span class="label-text">Number of rounds</span>
+				</div>
+				<input
+					type="number"
+					step="1"
+					placeholder="Type here"
+					class="input input-bordered"
+					bind:value={rounds}
+				/>
+			</label>
+			<div class="divider">Run</div>
 		{/if}
 		<label class="form-control">
 			<div class="label">
