@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, onMount, type Snippet } from 'svelte';
+	import { onDestroy, type Snippet } from 'svelte';
 
 	let duration = $state(30);
 	let pace = $state(5.3);

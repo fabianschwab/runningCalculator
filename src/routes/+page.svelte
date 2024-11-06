@@ -18,12 +18,17 @@
 	let totalDistance = $state(0);
 </script>
 
-<h1>Running Distance Calculator</h1>
-<p>Calculate total distance for your daily running workout!</p>
-<p>
-	Todays run totals in <span class="font-semibold">{totalDistance.toFixed(2)} km</span>. Have good
-	luck finding a nice track.
-</p>
+<h1 class="text-center md:text-left">Running Distance Calculator</h1>
+<p class="text-center md:text-left">Calculate total distance for your daily running workout!</p>
+<div class="mb-8 flex justify-center md:justify-start">
+	<div class="stats shadow">
+		<div class="stat">
+			<div class="stat-title">Todays run totals in</div>
+			<div class="stat-value">{totalDistance.toFixed(2)} km</div>
+			<div class="stat-desc">Have good luck finding a nice track.</div>
+		</div>
+	</div>
+</div>
 <div class="mb-8 flex flex-col">
 	<div class="form-control w-52">
 		<label class="label cursor-pointer">
