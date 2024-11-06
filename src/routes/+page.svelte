@@ -3,17 +3,25 @@
 	let enableWarmUp: boolean = $state(false);
 	let enableCoolDown: boolean = $state(false);
 
-	import { totalDistance } from '$lib';
+	let splitDistances = new Map<string, number>();
 
-	function callback(distance: number) {
-		console.log(`Total distance: ${distance.toFixed(2)} km`);
+	function callback(distance: number, id: string) {
+		splitDistances.set(id, distance);
+
+		let total = 0;
+		for (const [id, value] of splitDistances) {
+			total += value;
+		}
+		totalDistance = total;
 	}
+
+	let totalDistance = $state(0);
 </script>
 
 <h1>Running Distance Calculator</h1>
 <p>Calculate total distance for your daily running workout!</p>
 <p>
-	Todays run totals in <span class="font-semibold">{$totalDistance.toFixed(2)} km</span>. Have good
+	Todays run totals in <span class="font-semibold">{totalDistance.toFixed(2)} km</span>. Have good
 	luck finding a nice track.
 </p>
 <div class="mb-8 flex flex-col">
@@ -32,13 +40,13 @@
 </div>
 <div class="grid grid-cols-3 gap-8">
 	{#if enableWarmUp}
-		<PaceTime>
+		<PaceTime totalDistanceCallBack={{ fn: callback, id: 'warm-up' }}>
 			<span class="text-error">Warm up</span>
 		</PaceTime>
 	{/if}
-	<PaceTime workoutOption={true} />
+	<PaceTime workoutOption={true} totalDistanceCallBack={{ fn: callback, id: 'main-run' }} />
 	{#if enableCoolDown}
-		<PaceTime>
+		<PaceTime totalDistanceCallBack={{ fn: callback, id: 'cool-down' }}>
 			<span class="text-info">Cool down</span>
 		</PaceTime>
 	{/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type Snippet } from 'svelte';
+	import { onDestroy, onMount, type Snippet } from 'svelte';
 
 	let duration = $state('00:30:00');
 	let pace = $state('00:05:30');
@@ -12,20 +12,28 @@
 	let skipLastRecover: boolean = $state(true);
 
 	let distance: number = $derived.by(() => {
+		let d = time2Seconds(duration) / time2Seconds(pace);
+
 		if (enableWorkout) {
-			let paceTime = time2Seconds(pace);
-			let durationTime = time2Seconds(duration);
-
-			let recoverPaceTime = time2Seconds(recoverPace);
-			let recoverDurationTime = time2Seconds(recoverDuration);
-
-			return (
-				(durationTime / paceTime) * rounds +
-				(recoverDurationTime / recoverPaceTime) * (skipLastRecover ? rounds - 1 : rounds)
-			);
+			d =
+				d * rounds +
+				(time2Seconds(recoverDuration) / time2Seconds(recoverPace)) *
+					(skipLastRecover ? rounds - 1 : rounds);
 		}
 
-		return time2Seconds(duration) / time2Seconds(pace);
+		return d;
+	});
+
+	$effect(() => {
+		if (totalDistanceCallBack !== undefined) {
+			totalDistanceCallBack.fn(distance, totalDistanceCallBack.id);
+		}
+	});
+
+	onDestroy(() => {
+		if (totalDistanceCallBack !== undefined) {
+			totalDistanceCallBack.fn(0, totalDistanceCallBack.id);
+		}
 	});
 
 	function time2Seconds(time: string): number {
@@ -36,9 +44,13 @@
 	type Props = {
 		children?: Snippet;
 		workoutOption?: boolean;
+		totalDistanceCallBack?: {
+			fn: (distance: number, id: string) => void;
+			id: string;
+		};
 	};
 
-	let { children, workoutOption = false }: Props = $props();
+	let { children, workoutOption = false, totalDistanceCallBack = undefined }: Props = $props();
 </script>
 
 <div class="card bg-base-100 shadow-md">
