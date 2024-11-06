@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onDestroy, onMount, type Snippet } from 'svelte';
 
-	let duration = $state('00:30:00');
-	let pace = $state('00:05:30');
+	let duration = $state(30);
+	let pace = $state(5.3);
 
-	let recoverPace = $state('00:06:00');
-	let recoverDuration = $state('00:06:00');
+	let recoverPace = $state(6.0);
+	let recoverDuration = $state(2.0);
 
 	let enableWorkout: boolean = $state(false);
 	let rounds: number = $state(1);
@@ -36,9 +36,9 @@
 		}
 	});
 
-	function time2Seconds(time: string): number {
-		let [h, m, s] = time.split(':').map(Number);
-		return h * 3600 + m * 60 + s;
+	function time2Seconds(time: number): number {
+		let seconds = Math.floor(time) * 60 + (time % 1) * 100;
+		return seconds;
 	}
 
 	type Props = {
@@ -82,6 +82,7 @@
 					type="number"
 					step="1"
 					min="1"
+					pattern="\d*"
 					placeholder="Type here"
 					class="input input-bordered"
 					bind:value={rounds}
@@ -91,15 +92,29 @@
 		{/if}
 		<label class="form-control">
 			<div class="label">
-				<span class="label-text">Duration</span>
+				<span class="label-text">Duration (min)</span>
 			</div>
-			<input step="1" min="0" bind:value={duration} type="time" class="input input-bordered" />
+			<input
+				step=".1"
+				min="0"
+				bind:value={duration}
+				type="number"
+				pattern="[0-9]+([\.,][0-9]+)?"
+				class="input input-bordered"
+			/>
 		</label>
 		<label class="form-control">
 			<div class="label">
-				<span class="label-text">Pace (Time for 1 km)</span>
+				<span class="label-text">Pace (min/km)</span>
 			</div>
-			<input bind:value={pace} type="time" step="1" min="0" class="input input-bordered" />
+			<input
+				bind:value={pace}
+				type="number"
+				pattern="[0-9]+([\.,][0-9]+)?"
+				step=".1"
+				min="0"
+				class="input input-bordered"
+			/>
 		</label>
 		{#if enableWorkout}
 			<div class="divider">Recover</div>
@@ -108,10 +123,11 @@
 					<span class="label-text">Duration</span>
 				</div>
 				<input
-					step="1"
+					step=".1"
 					min="0"
 					bind:value={recoverDuration}
-					type="time"
+					type="number"
+					pattern="[0-9]+([\.,][0-9]+)?"
 					class="input input-bordered"
 				/>
 			</label>
@@ -119,7 +135,14 @@
 				<div class="label">
 					<span class="label-text">Pace (Time for 1 km)</span>
 				</div>
-				<input bind:value={recoverPace} type="time" step="1" min="0" class="input input-bordered" />
+				<input
+					bind:value={recoverPace}
+					type="number"
+					pattern="[0-9]+([\.,][0-9]+)?"
+					step=".1"
+					min="0"
+					class="input input-bordered"
+				/>
 			</label>
 			<div class="form-control">
 				<label class="label cursor-pointer">
