@@ -38,7 +38,7 @@
 		</label>
 	</div>
 </div>
-<div class="grid grid-cols-3 gap-8">
+<div class="flex flex-col gap-8 md:grid md:grid-cols-3">
 	{#if enableWarmUp}
 		<PaceTime totalDistanceCallBack={{ fn: callback, id: 'warm-up' }}>
 			<span class="text-error">Warm up</span>
