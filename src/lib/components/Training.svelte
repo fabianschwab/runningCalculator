@@ -1,79 +1,34 @@
 <script lang="ts">
-	import { onDestroy, type Snippet } from 'svelte';
+	import { trainingStore, time2Seconds } from '$lib/index.svelte';
 
-	let duration = $state(30);
-	let pace = $state(5.3);
+	let distance = $derived.by(() => {
+		let d = time2Seconds(trainingStore.duration) / time2Seconds(trainingStore.pace);
 
-	let recoverPace = $state(6.0);
-	let recoverDuration = $state(2.0);
-
-	let enableWorkout: boolean = $state(false);
-	let rounds: number = $state(1);
-	let skipLastRecover: boolean = $state(true);
-
-	let distance: number = $derived.by(() => {
-		let d = time2Seconds(duration) / time2Seconds(pace);
-
-		if (enableWorkout) {
+		if (trainingStore.enableWorkout) {
 			d =
-				d * rounds +
-				(time2Seconds(recoverDuration) / time2Seconds(recoverPace)) *
-					(skipLastRecover ? rounds - 1 : rounds);
+				d * trainingStore.rounds +
+				(time2Seconds(trainingStore.recoverDuration) / time2Seconds(trainingStore.recoverPace)) *
+					(trainingStore.skipLastRecover ? trainingStore.rounds - 1 : trainingStore.rounds);
 		}
-
 		return d;
 	});
-
-	$effect(() => {
-		if (totalDistanceCallBack !== undefined) {
-			totalDistanceCallBack.fn(distance, totalDistanceCallBack.id);
-		}
-	});
-
-	onDestroy(() => {
-		if (totalDistanceCallBack !== undefined) {
-			totalDistanceCallBack.fn(0, totalDistanceCallBack.id);
-		}
-	});
-
-	function time2Seconds(time: number): number {
-		let seconds = Math.floor(time) * 60 + (time % 1) * 100;
-		return seconds;
-	}
-
-	type Props = {
-		children?: Snippet;
-		workoutOption?: boolean;
-		totalDistanceCallBack?: {
-			fn: (distance: number, id: string) => void;
-			id: string;
-		};
-	};
-
-	let { children, workoutOption = false, totalDistanceCallBack = undefined }: Props = $props();
 </script>
 
 <div class="card bg-base-100 shadow-md">
 	<div class="card-body flex gap-3">
 		<div class=" text-center text-lg font-bold">
-			{#if children}
-				{@render children()}
-			{:else}
-				Training
-			{/if}
+			Training
 			<div class="text-sm font-semibold">
 				Split distance {distance.toFixed(2)} km
 			</div>
 		</div>
-		{#if workoutOption}
-			<div class="form-control">
-				<label class="label cursor-pointer">
-					<span class="label-text">Do a workout</span>
-					<input type="checkbox" class="toggle" bind:checked={enableWorkout} />
-				</label>
-			</div>
-		{/if}
-		{#if enableWorkout}
+		<div class="form-control">
+			<label class="label cursor-pointer">
+				<span class="label-text">Do a workout</span>
+				<input type="checkbox" class="toggle" bind:checked={trainingStore.enableWorkout} />
+			</label>
+		</div>
+		{#if trainingStore.enableWorkout}
 			<label class="form-control">
 				<div class="label">
 					<span class="label-text">Number of rounds</span>
@@ -85,7 +40,7 @@
 					pattern="\d*"
 					placeholder="Type here"
 					class="input input-bordered"
-					bind:value={rounds}
+					bind:value={trainingStore.rounds}
 				/>
 			</label>
 			<div class="divider">Run</div>
@@ -97,7 +52,7 @@
 			<input
 				step=".1"
 				min="0"
-				bind:value={duration}
+				bind:value={trainingStore.duration}
 				type="number"
 				pattern="[0-9]+([\.,][0-9]+)?"
 				class="input input-bordered"
@@ -108,7 +63,7 @@
 				<span class="label-text">Pace (min/km)</span>
 			</div>
 			<input
-				bind:value={pace}
+				bind:value={trainingStore.pace}
 				type="number"
 				pattern="[0-9]+([\.,][0-9]+)?"
 				step=".1"
@@ -116,7 +71,7 @@
 				class="input input-bordered"
 			/>
 		</label>
-		{#if enableWorkout}
+		{#if trainingStore.enableWorkout}
 			<div class="divider">Recover</div>
 			<label class="form-control">
 				<div class="label">
@@ -125,7 +80,7 @@
 				<input
 					step=".1"
 					min="0"
-					bind:value={recoverDuration}
+					bind:value={trainingStore.recoverDuration}
 					type="number"
 					pattern="[0-9]+([\.,][0-9]+)?"
 					class="input input-bordered"
@@ -136,7 +91,7 @@
 					<span class="label-text">Pace (Time for 1 km)</span>
 				</div>
 				<input
-					bind:value={recoverPace}
+					bind:value={trainingStore.recoverPace}
 					type="number"
 					pattern="[0-9]+([\.,][0-9]+)?"
 					step=".1"
@@ -147,7 +102,7 @@
 			<div class="form-control">
 				<label class="label cursor-pointer">
 					<span class="label-text">Skip last recover</span>
-					<input type="checkbox" class="toggle" bind:checked={skipLastRecover} />
+					<input type="checkbox" class="toggle" bind:checked={trainingStore.skipLastRecover} />
 				</label>
 			</div>
 		{/if}
