@@ -36,7 +36,7 @@
 
 	function copyToClipboard() {
 		copied = true;
-		let message = $page.url.host + '?shared';
+		let message = 'https://' + $page.url.host + '?shared';
 
 		if (enableWarmUp) {
 			message += '&warmup=' + warmupStore.pace + '-' + warmupStore.duration;
