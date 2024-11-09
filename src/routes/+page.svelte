@@ -76,22 +76,16 @@
 		let run = $page.url.searchParams.get('run');
 
 		if (warm) {
-			console.log('warmup');
-			console.log(warm);
 			enableWarmUp = true;
 			warmupStore.pace = parseFloat(warm.split('-')[0]);
 			warmupStore.duration = parseFloat(warm.split('-')[1]);
 		}
 		if (cool) {
-			console.log('cooldown');
-			console.log(cool);
 			enableCoolDown = true;
 			cooldownStore.pace = parseFloat(cool.split('-')[0]);
 			cooldownStore.duration = parseFloat(cool.split('-')[1]);
 		}
 		if (run) {
-			console.log('run');
-			console.log(run);
 			let [enable, rounds, pace, duration, recoverDuration, recoverPace, skipLastRecover] =
 				run.split('-');
 			trainingStore.enableWorkout = enable === 'true';
