@@ -97,6 +97,18 @@
 			trainingStore.skipLastRecover = skipLastRecover === 'true';
 		}
 	});
+
+	import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
+
+	const tweened_value = tweened(0, {
+		duration: 400,
+		easing: cubicOut
+	});
+
+	$effect(() => {
+		$tweened_value = totalDistance;
+	});
 </script>
 
 {#if copied}
@@ -123,7 +135,7 @@
 	<div class="stats shadow">
 		<div class="stat">
 			<div class="stat-title">Todays run totals in</div>
-			<div class="stat-value">{totalDistance.toFixed(2)} km</div>
+			<div class="stat-value">{$tweened_value.toFixed(2)} km</div>
 			<div class="stat-desc">Have good luck finding a nice track.</div>
 		</div>
 		<div class="stat items-center">
@@ -167,10 +179,10 @@
 		background: linear-gradient(
 			90deg,
 			oklch(var(--s)) 4%,
-			color-mix(in oklch, oklch(var(--s)), oklch(var(--er))) 22%,
-			oklch(var(--p)) 45%,
-			color-mix(in oklch, oklch(var(--p)), oklch(var(--a))) 67%,
-			oklch(var(--a)) 100.2%
+			color-mix(in oklch, oklch(var(--s)), oklch(var(--er))) 12%,
+			oklch(var(--p)) 35%,
+			color-mix(in oklch, oklch(var(--p)), oklch(var(--a))) 57%,
+			oklch(var(--a)) 90.2%
 		);
 		background-clip: text;
 		color: transparent;

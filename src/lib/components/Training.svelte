@@ -25,7 +25,11 @@
 		<div class="form-control">
 			<label class="label cursor-pointer">
 				<span class="label-text">Do a workout</span>
-				<input type="checkbox" class="toggle" bind:checked={trainingStore.enableWorkout} />
+				<input
+					type="checkbox"
+					class="toggle toggle-success"
+					bind:checked={trainingStore.enableWorkout}
+				/>
 			</label>
 		</div>
 		{#if trainingStore.enableWorkout}
@@ -102,7 +106,11 @@
 			<div class="form-control">
 				<label class="label cursor-pointer">
 					<span class="label-text">Skip last recover</span>
-					<input type="checkbox" class="toggle" bind:checked={trainingStore.skipLastRecover} />
+					<input
+						type="checkbox"
+						class="toggle toggle-warning"
+						bind:checked={trainingStore.skipLastRecover}
+					/>
 				</label>
 			</div>
 		{/if}
