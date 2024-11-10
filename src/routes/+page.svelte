@@ -161,3 +161,18 @@
 		<Cooldown />
 	{/if}
 </div>
+
+<style>
+	h1 {
+		background: linear-gradient(
+			90deg,
+			oklch(var(--s)) 4%,
+			color-mix(in oklch, oklch(var(--s)), oklch(var(--er))) 22%,
+			oklch(var(--p)) 45%,
+			color-mix(in oklch, oklch(var(--p)), oklch(var(--a))) 67%,
+			oklch(var(--a)) 100.2%
+		);
+		background-clip: text;
+		color: transparent;
+	}
+</style>
