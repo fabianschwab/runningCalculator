@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { trainingStore, time2Seconds } from '$lib/index.svelte';
 
+	let workoutDistance = $derived(
+		time2Seconds(trainingStore.duration) / time2Seconds(trainingStore.pace)
+	);
+	let recoveryDistance = $derived(
+		time2Seconds(trainingStore.recoverDuration) / time2Seconds(trainingStore.recoverPace)
+	);
+
 	let distance = $derived.by(() => {
 		let d = time2Seconds(trainingStore.duration) / time2Seconds(trainingStore.pace);
 
@@ -47,7 +54,7 @@
 					bind:value={trainingStore.rounds}
 				/>
 			</label>
-			<div class="divider">Run</div>
+			<div class="divider">Run: {workoutDistance.toFixed(2)} km</div>
 		{/if}
 		<label class="form-control">
 			<div class="label">
@@ -76,7 +83,7 @@
 			/>
 		</label>
 		{#if trainingStore.enableWorkout}
-			<div class="divider">Recover</div>
+			<div class="divider">Recover: {recoveryDistance.toFixed(2)} km</div>
 			<label class="form-control">
 				<div class="label">
 					<span class="label-text">Duration</span>
