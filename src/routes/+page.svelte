@@ -129,7 +129,6 @@
 		<span>Run copied to clipboard!</span>
 	</div>
 {/if}
-<h1 class="text-center md:text-left">Running Distance Calculator</h1>
 <p class="text-center md:text-left">Calculate total distance for your daily running workout!</p>
 <div class="mb-8 flex justify-center md:justify-start">
 	<div class="stats shadow">
@@ -173,18 +172,3 @@
 		<Cooldown />
 	{/if}
 </div>
-
-<style>
-	h1 {
-		background: linear-gradient(
-			90deg,
-			oklch(var(--s)) 4%,
-			color-mix(in oklch, oklch(var(--s)), oklch(var(--er))) 12%,
-			oklch(var(--p)) 35%,
-			color-mix(in oklch, oklch(var(--p)), oklch(var(--a))) 57%,
-			oklch(var(--a)) 90.2%
-		);
-		background-clip: text;
-		color: transparent;
-	}
-</style>
