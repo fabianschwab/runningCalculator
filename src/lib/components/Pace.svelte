@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { time2Seconds } from '$lib/index.svelte';
+	import { persisted } from 'svelte-persisted-store';
 
 	let { distance } = $props();
 
-	let time = $state<number | undefined>();
+	const time = persisted(`pace-${distance}`, 0);
+
+	// let time = $state<number | undefined>();
 	let pace = $derived.by(() => {
 		if (time) {
-			const paceInSecondsPerKm = time2Seconds(time) / distance;
+			const paceInSecondsPerKm = time2Seconds($time) / distance;
 			const paceMinutes = Math.floor(paceInSecondsPerKm / 60);
 			const paceSeconds = Math.round(paceInSecondsPerKm % 60);
 			return `${paceMinutes}:${paceSeconds.toString().padStart(2, '0')}`;
@@ -23,7 +26,7 @@
 		</div>
 	</div>
 	<input
-		bind:value={time}
+		bind:value={$time}
 		type="number"
 		placeholder="target time (min.sec)"
 		pattern="[0-9]+([\.,][0-9]+)?"
