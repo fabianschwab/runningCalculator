@@ -4,10 +4,13 @@
 
 	import { persisted } from 'svelte-persisted-store';
 
+	import { page } from '$app/stores';
+	let isShared = $page.url.searchParams.has('shared');
+
 	const coolDown = persisted('coolDown', { pace: 0, duration: 0 });
 
 	$effect(() => {
-		if ($coolDown.pace !== 0 && $coolDown.duration !== 0) {
+		if ($coolDown.pace !== 0 && $coolDown.duration !== 0 && !isShared) {
 			cooldownStore.duration = $coolDown.duration;
 			cooldownStore.pace = $coolDown.pace;
 		}
