@@ -6,7 +6,7 @@
 </script>
 
 <div class="prose m-auto max-w-4xl px-3 pb-16 pt-6">
-	<h1 class="text-center md:text-left">Running Distance Calculator</h1>
+	<h1 class="text-center md:text-left">Running distance calculator for Garmin daily suggestions</h1>
 	<div class="mb-4">
 		{@render children()}
 	</div>
@@ -44,7 +44,7 @@
 		);
 		background-clip: text;
 		color: transparent;
-		font-size: 2.4rem;
+		font-size: 1.5rem;
 		font-weight: 800;
 	}
 </style>
